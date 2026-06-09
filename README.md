@@ -11,5 +11,5 @@ I live in IntelliJ and VS Code, and I do most of my work on Linux.
 
 **Fun Facts:**
 - I don't Like Coffee
-- I Like JJBA
+- I'm a huge JJBA fan
 - My commits are mostly "fix" and "fix again"
