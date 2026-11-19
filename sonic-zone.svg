@@ -46,7 +46,7 @@
   </g>
 
   <g class="rings-track">
-    <g transform="translate(340, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g><g transform="translate(435, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g><g transform="translate(530, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g>
+    <g transform="translate(340, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g><g transform="translate(435, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g><g transform="translate(530, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g><g transform="translate(625, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g><g transform="translate(720, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g>
   </g>
 
   
@@ -101,13 +101,13 @@
     <text x="0" y="0" class="zone-title">GREEN HILL ZONE · ACT 1</text>
     
     <text x="0" y="22" class="hud-label">SCORE</text>
-    <text x="75" y="22" class="hud-val">100</text>
+    <text x="75" y="22" class="hud-val">160</text>
 
     <text x="0" y="42" class="hud-label">TIME (7D)</text>
-    <text x="75" y="42" class="hud-val">3 COMMITS</text>
+    <text x="75" y="42" class="hud-val">9 COMMITS</text>
 
     <text x="0" y="62" class="hud-label">RINGS (30D)</text>
-    <text x="75" y="62" class="hud-val">25</text>
+    <text x="75" y="62" class="hud-val">43</text>
 
     <text x="210" y="22" class="hud-label">STREAK</text>
     <text x="270" y="22" class="hud-val">3 DAYS</text>
