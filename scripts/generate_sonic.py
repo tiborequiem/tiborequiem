@@ -1,14 +1,16 @@
+import hashlib
 import json
 import os
 import urllib.request
 from datetime import datetime, timedelta, timezone
 
-USERNAME  = os.environ.get("GITHUB_USERNAME", "tiborequiem")
-TOKEN     = os.environ.get("GITHUB_TOKEN", "")
-TZ_OFFSET = int(os.environ.get("TZ_OFFSET", "2"))
+USERNAME    = os.environ.get("GITHUB_USERNAME", "tiborequiem")
+TOKEN       = os.environ.get("GITHUB_TOKEN", "")
+TZ_OFFSET   = int(os.environ.get("TZ_OFFSET", "2"))
 OUTPUT_PATH = os.environ.get("OUTPUT_PATH", "sonic-zone.svg")
 
-# ── API helpers ───────────────────────────────────────────────────────────────
+
+# ── API ───────────────────────────────────────────────────────────────────────
 
 def api_request(url, payload=None):
     headers = {"User-Agent": "sonic-github-svg", "Accept": "application/vnd.github+json"}
@@ -24,7 +26,6 @@ def fetch_github_stats():
     commits_7d = commits_30d = total_year = streak = 0
     zone = "day"
 
-    # GraphQL contribution calendar (authenticated)
     if TOKEN:
         try:
             gql = api_request(
@@ -48,29 +49,30 @@ def fetch_github_stats():
         except Exception as e:
             print(f"[WARN] GraphQL: {e}")
 
-    # Public events for zone detection (and fallback stats)
     tz = timezone(timedelta(hours=TZ_OFFSET))
     buckets = {"day": 0, "sunset": 0, "night": 0}
     try:
-        events = api_request(f"https://api.github.com/users/{USERNAME}/events/public?per_page=100")
+        events = api_request(
+            f"https://api.github.com/users/{USERNAME}/events/public?per_page=100"
+        )
         pushes = [e for e in events if e.get("type") == "PushEvent"]
         for ev in pushes:
-            dt = datetime.fromisoformat(ev["created_at"].replace("Z", "+00:00")).astimezone(tz)
+            dt = datetime.fromisoformat(ev["created_at"].replace("Z","+00:00")).astimezone(tz)
             h  = dt.hour
             if   6  <= h < 18: buckets["day"]    += 1
             elif 18 <= h < 22: buckets["sunset"] += 1
             else:               buckets["night"]  += 1
         if any(buckets.values()):
             zone = max(buckets, key=buckets.get)
-        if not TOKEN:                                # fallback stats from events
+        if not TOKEN:
             now = datetime.now(tz)
             for ev in pushes:
-                dt = datetime.fromisoformat(ev["created_at"].replace("Z", "+00:00")).astimezone(tz)
+                dt = datetime.fromisoformat(ev["created_at"].replace("Z","+00:00")).astimezone(tz)
                 n  = len(ev.get("payload", {}).get("commits", [])) or 1
                 if now - dt <= timedelta(days=7):  commits_7d  += n
                 if now - dt <= timedelta(days=30): commits_30d += n
             total_year = max(commits_30d * 4, 0)
-            streak     = 3
+            streak = 3
     except Exception as e:
         print(f"[WARN] Events: {e}")
 
@@ -78,7 +80,7 @@ def fetch_github_stats():
                 total_year=total_year, streak=streak, zone=zone)
 
 
-# ── SVG renderer ─────────────────────────────────────────────────────────────
+# ── Render ────────────────────────────────────────────────────────────────────
 
 def render_svg(stats: dict) -> str:
     c7     = stats["commits_7d"]
@@ -87,324 +89,285 @@ def render_svg(stats: dict) -> str:
     zone   = stats["zone"]
     total  = stats["total_year"]
 
-    # ── mode ─────────────────────────────────────────────────────────────────
-    if   c7 >= 30 or streak >= 7: mode, accent = "SUPER SONIC", "#FACC15"
-    elif c7 >= 10:                 mode, accent = "PEEL OUT",    "#60A5FA"
-    elif c7 >= 1:                  mode, accent = "CRUISING",    "#34D399"
-    else:                          mode, accent = "IDLE",        "#94A3B8"
+    # ── Mode ─────────────────────────────────────────────────────────────────
+    if   c7 >= 30 or streak >= 7: mode, accent = "SUPER SONIC ★", "#F9C200"
+    elif c7 >= 10:                 mode, accent = "PEEL OUT",       "#60A5FA"
+    elif c7 >= 1:                  mode, accent = "CRUISING",       "#4ADE80"
+    else:                          mode, accent = "IDLE",           "#94A3B8"
 
-    # ── zone palette ─────────────────────────────────────────────────────────
-    Z = {
-        "day": {
-            "label":    "GREEN HILL ZONE",
-            "bg":       "#0C1428",
-            "neon1":    "#22C55E",   # dominant neon (rings, borders)
-            "neon2":    "#4ADE80",   # secondary neon
-            "sky_line": "#1A3A1A",   # horizon stripe
-        },
-        "sunset": {
-            "label":    "SUNSET HILL ZONE",
-            "bg":       "#120818",
-            "neon1":    "#FB923C",
-            "neon2":    "#FBBF24",
-            "sky_line": "#3B1A0A",
-        },
-        "night": {
-            "label":    "STAR LIGHT ZONE",
-            "bg":       "#060614",
-            "neon1":    "#818CF8",
-            "neon2":    "#22D3EE",
-            "sky_line": "#0F0F3A",
-        },
+    scroll_spd = {"SUPER SONIC ★":"0.26s","PEEL OUT":"0.44s",
+                  "CRUISING":"0.85s","IDLE":"8s"}[mode]
+
+    # ── Zone palettes — game accurate ────────────────────────────────────────
+    P = {
+        "day": dict(
+            name        = "GREEN HILL ZONE",
+            sky_top     = "#5BB8F5",   # classic GHZ sky
+            sky_bot     = "#9DD8F9",
+            hill_back   = "#2DB447",   # back hill — bright green
+            hill_back_s = "#1A8A2E",   # stroke / shadow
+            hill_fore   = "#208A38",   # front hill — slightly darker
+            hill_fore_s = "#135E22",
+            checker_a   = "#6B3800",   # classic Sonic ground checker
+            checker_b   = "#9A5200",
+            grass       = "#29C242",
+            grass_hi    = "#52E870",
+            clouds      = True,
+            stars       = False,
+        ),
+        "sunset": dict(
+            name        = "SUNSET HILL ZONE",
+            sky_top     = "#1C0836",
+            sky_bot     = "#C84A18",
+            hill_back   = "#7A2C10",
+            hill_back_s = "#521C08",
+            hill_fore   = "#902E10",
+            hill_fore_s = "#62200A",
+            checker_a   = "#3C1800",
+            checker_b   = "#5E2800",
+            grass       = "#A03418",
+            grass_hi    = "#C85030",
+            clouds      = False,
+            stars       = True,
+        ),
+        "night": dict(
+            name        = "STAR LIGHT ZONE",
+            sky_top     = "#02020E",
+            sky_bot     = "#0C0B30",
+            hill_back   = "#0E1842",
+            hill_back_s = "#080E26",
+            hill_fore   = "#141E5A",
+            hill_fore_s = "#0C1438",
+            checker_a   = "#080826",
+            checker_b   = "#10103A",
+            grass       = "#1A1C60",
+            grass_hi    = "#4040B8",
+            clouds      = False,
+            stars       = True,
+        ),
     }
-    p = Z[zone]
+    p = P[zone]
 
-    neon1  = p["neon1"]
-    neon2  = p["neon2"]
-    bg     = p["bg"]
-
-    # ── Chaos Emeralds ───────────────────────────────────────────────────────
-    EM_COLORS = ["#38BDF8","#FACC15","#EF4444","#A855F7","#22C55E","#3B82F6","#E2E8F0"]
-    lit       = min(streak, 7)
-
-    em_svg = ""
-    for i, col in enumerate(EM_COLORS):
-        ex = 32 + i * 36
-        if i < lit:
-            em_svg += (
-                f'<g filter="url(#glow-sm)">'
-                f'  <polygon points="{ex},8 {ex+10},18 {ex},28 {ex-10},18"'
-                f'           fill="{col}" stroke="white" stroke-width="1"/>'
-                f'</g>'
+    # ── Clouds (day only) ─────────────────────────────────────────────────────
+    clouds_svg = ""
+    if p["clouds"]:
+        def cloud(cx, cy, s=1.0):
+            # classic cartoon cloud: 3 overlapping ellipses
+            return (
+                f'<ellipse cx="{cx}" cy="{cy}" rx="{int(30*s)}" ry="{int(16*s)}" fill="white"/>'
+                f'<ellipse cx="{cx+int(24*s)}" cy="{cy-int(7*s)}" rx="{int(20*s)}" ry="{int(14*s)}" fill="white"/>'
+                f'<ellipse cx="{cx-int(22*s)}" cy="{cy-int(5*s)}" rx="{int(18*s)}" ry="{int(12*s)}" fill="white"/>'
             )
-        else:
-            em_svg += (
-                f'<polygon points="{ex},8 {ex+10},18 {ex},28 {ex-10},18"'
-                f' fill="none" stroke="#334155" stroke-width="1" opacity="0.5"/>'
-            )
-
-    # ── Animated rings row ───────────────────────────────────────────────────
-    # Number of rings scales with 30-day commits
-    ring_count = max(2, min(7, c30 // 6 + 1)) if c30 > 0 else 2
-    rings_svg  = ""
-    for i in range(ring_count + 3):              # extra so loop is seamless
-        rx = 42 + i * 100
-        rings_svg += (
-            f'<g transform="translate({rx},0)" filter="url(#glow-sm)">'
-            f'  <g class="ring-spin">'
-            f'    <ellipse cx="0" cy="0" rx="16" ry="16"'
-            f'             fill="none" stroke="{neon1}" stroke-width="4"/>'
-            f'    <ellipse cx="0" cy="0" rx="16" ry="16"'
-            f'             fill="none" stroke="{neon2}" stroke-width="1.5"'
-            f'             stroke-dasharray="14 18"/>'
-            f'  </g>'
+        clouds_svg = (
+            f'<g opacity="0.95">'
+            f'{cloud(118, 72, 1.0)}'
+            f'{cloud(390, 62, 0.75)}'
+            f'{cloud(636, 70, 1.1)}'
             f'</g>'
         )
 
-    # ── Scanline overlay ─────────────────────────────────────────────────────
-    # SVG pattern of alternating semi-transparent stripes — purely decorative
-    scanlines = (
-        '<rect width="800" height="230" fill="url(#scanlines)" '
-        'pointer-events="none" rx="12" opacity="0.18"/>'
-    )
-
-    # ── Star field (night / sunset) ──────────────────────────────────────────
+    # ── Stars (night / sunset) ────────────────────────────────────────────────
     stars_svg = ""
-    if zone in ("night", "sunset"):
-        import hashlib
+    if p["stars"]:
         pts = []
-        for n in range(55):
-            h = int(hashlib.md5(f"star{n}".encode()).hexdigest()[:8], 16)
+        for n in range(52):
+            h  = int(hashlib.md5(f"star{n}".encode()).hexdigest()[:8], 16)
             sx = (h >> 16) % 740 + 30
-            sy = (h & 0xFFFF) % 110 + 10
-            sr = 0.8 + ((h >> 8) & 0xFF) / 400
+            sy = (h & 0xFFFF) % 95 + 48    # stay in scene band
+            sr = 0.6 + ((h >> 8) & 0xFF) / 420
             pts.append((sx, sy, sr, n))
         stars_svg = "".join(
-            f'<circle cx="{sx}" cy="{sy}" r="{sr:.1f}" fill="white" opacity="0.7"'
-            f' class="twinkle" style="animation-delay:{(n*73)%2000/1000:.2f}s"/>'
+            f'<circle cx="{sx}" cy="{sy}" r="{sr:.1f}" fill="white" opacity="0.85"'
+            f' style="animation:twinkle {1.6+(n%5)*0.4:.1f}s ease-in-out {(n*83%2000)/1000:.2f}s infinite alternate"/>'
             for sx, sy, sr, n in pts
         )
 
-    # ── Stat rows ────────────────────────────────────────────────────────────
-    # Each row: label (neon) + value (white) + small bar
-    def stat_row(label, value, bar_pct, bar_color, row_y):
-        bar_w     = int(bar_pct * 230)
-        bar_w     = max(2, bar_w)
-        label_len = len(label)
-        return f"""
-  <text x="30"  y="{row_y}"    class="stat-label">{label}</text>
-  <text x="210" y="{row_y}"    class="stat-val">{value}</text>
-  <rect x="30"  y="{row_y+5}"  width="230" height="4" rx="2" fill="#1E293B"/>
-  <rect x="30"  y="{row_y+5}"  width="{bar_w}" height="4" rx="2"
-        fill="{bar_color}" filter="url(#glow-sm)"/>"""
+    # ── Hills (Green Hill Zone silhouette) ────────────────────────────────────
+    # Two round humps for the back layer, three for the front.
+    # All paths land at y=147 (the grass line) on both ends.
+    hill_back = (
+        f'<path d="M0,147 C40,147 70,88 155,88 C240,88 270,147 360,147'
+        f'          C450,147 480,84 565,84 C650,84 680,147 800,147 Z"'
+        f' fill="{p["hill_back"]}" stroke="{p["hill_back_s"]}" stroke-width="1.5"/>'
+    )
+    hill_fore = (
+        f'<path d="M0,147 C30,147 55,116 115,116 C175,116 200,147 270,147'
+        f'          C340,147 365,112 435,112 C505,112 530,147 610,147'
+        f'          C680,147 710,118 775,118 C800,118 800,138 800,147 Z"'
+        f' fill="{p["hill_fore"]}" stroke="{p["hill_fore_s"]}" stroke-width="1"/>'
+    )
 
-    rows = []
+    # ── Rings ─────────────────────────────────────────────────────────────────
+    ring_count = max(2, min(8, (c30 // 7) + 2)) if c7 > 0 else 2
+    ring_xs    = [int(210 + i * (380 / max(ring_count - 1, 1)))
+                  for i in range(ring_count)]
+    rings_svg  = "".join(
+        f'<g transform="translate({rx},130)">'
+        f'  <g class="ring-spin">'
+        f'    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>'
+        f'    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"'
+        f'            stroke-dasharray="8 14" stroke-linecap="round"/>'
+        f'  </g>'
+        f'</g>'
+        for rx in ring_xs
+    )
 
-    # SCORE
-    rows.append(stat_row(
-        "SCORE", f"{total:,}",
-        min(total / 1000, 1.0),
-        neon2, 0
-    ))
-    # RINGS 7D
-    rows.append(stat_row(
-        "RINGS · 7D", str(c7),
-        min(c7 / 30, 1.0),
-        neon1, 32
-    ))
-    # RINGS 30D
-    rows.append(stat_row(
-        "RINGS · 30D", str(c30),
-        min(c30 / 100, 1.0),
-        neon1, 64
-    ))
-    # STREAK
-    rows.append(stat_row(
-        "STREAK", f"{streak} DAYS",
-        min(streak / 7, 1.0),
-        accent, 96
-    ))
-
-    stat_block = "\n".join(rows)
-
-    # ── Big title / mode badge ───────────────────────────────────────────────
-    # Right column: big mode text + zone label
+    # ── Chaos Emeralds ────────────────────────────────────────────────────────
+    EM = ["#38BDF8","#F9C200","#EF4444","#A855F7","#22C55E","#3B82F6","#E2E8F0"]
+    lit = min(streak, 7)
+    em_svg = ""
+    for i, col in enumerate(EM):
+        ex = 574 + i * 30
+        if i < lit:
+            em_svg += (
+                f'<polygon points="{ex},163 {ex+9},175 {ex},187 {ex-9},175"'
+                f' fill="{col}" stroke="rgba(255,255,255,0.6)" stroke-width="0.8"/>'
+            )
+        else:
+            em_svg += (
+                f'<polygon points="{ex},163 {ex+9},175 {ex},187 {ex-9},175"'
+                f' fill="none" stroke="#2D3748" stroke-width="1"/>'
+            )
 
     return f"""<svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 800 230" width="800" height="230"
-     role="img" aria-label="{USERNAME} GitHub Activity — {p['label']}">
+     viewBox="0 0 800 200" width="800" height="200"
+     role="img" aria-label="{USERNAME} GitHub — {p['name']} · ACT 1">
   <defs>
-    <!-- Scanline pattern -->
-    <pattern id="scanlines" width="1" height="4" patternUnits="userSpaceOnUse">
-      <rect width="1" height="2" fill="black"/>
-    </pattern>
+    <clipPath id="card"><rect width="800" height="200" rx="12"/></clipPath>
 
-    <!-- Neon glow (strong) -->
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="5" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-
-    <!-- Neon glow (subtle) -->
-    <filter id="glow-sm" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2.5" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-
-    <!-- CRT border gradient -->
-    <linearGradient id="border-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"   stop-color="{neon1}"/>
-      <stop offset="50%"  stop-color="{accent}"/>
-      <stop offset="100%" stop-color="{neon2}"/>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="{p['sky_top']}"/>
+      <stop offset="100%" stop-color="{p['sky_bot']}"/>
     </linearGradient>
 
-    <!-- Animated ring scroll -->
+    <!-- Classic Sonic 1 checkerboard ground -->
+    <pattern id="checker" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="{p['checker_a']}"/>
+      <rect x="0"  y="0"  width="16" height="16" fill="{p['checker_b']}"/>
+      <rect x="16" y="16" width="16" height="16" fill="{p['checker_b']}"/>
+    </pattern>
+
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
+      /* HUD font — monospace approximates the Sonic bitmap font */
+      .hud-lbl {{
+        font: 600 9px 'Courier New', Courier, monospace;
+        fill: #94A3B8; letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }}
+      .hud-val {{
+        font: 700 16px 'Courier New', Courier, monospace;
+        fill: #FFFFFF;
+      }}
+      .zone-name {{
+        font: 700 10px 'Courier New', Courier, monospace;
+        fill: {accent}; letter-spacing: 1px;
+      }}
+      .mode-val {{
+        font: 700 13px 'Courier New', Courier, monospace;
+        fill: {accent}; letter-spacing: 1px;
+      }}
+      .em-lbl {{
+        font: 600 8px 'Courier New', Courier, monospace;
+        fill: #4B5563; letter-spacing: 1.5px;
+      }}
 
-      .px  {{ font-family: 'Press Start 2P', 'Courier New', monospace; }}
+      /* Ground scroll */
+      .ground {{ animation: gscroll {scroll_spd} linear infinite; }}
 
-      .zone-label {{
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 9px; fill: {neon2}; letter-spacing: 1px;
+      /* Ring squish — transform-box keeps origin centred on each ring */
+      .ring-spin {{
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: rspin 0.65s ease-in-out infinite;
       }}
-      .mode-text {{
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 15px; fill: {accent};
-      }}
-      .username-text {{
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 11px; fill: white;
-      }}
-      .stat-label {{
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 8px; fill: {neon1}; letter-spacing: 0.5px;
-      }}
-      .stat-val {{
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 8px; fill: white;
-      }}
-      .em-label {{
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 7px; fill: #64748B; letter-spacing: 1px;
-      }}
-      .ring-row  {{ animation: ring-scroll 4s linear infinite; }}
-      .ring-spin {{ animation: spin 0.7s ease-in-out infinite; }}
-      .twinkle   {{ animation: twinkle 2.4s ease-in-out infinite alternate; }}
-      .blink     {{ animation: blink 1.2s step-end infinite; }}
 
-      @keyframes ring-scroll {{
-        from {{ transform: translateX(0);      }}
-        to   {{ transform: translateX(-100px); }}
+      @keyframes gscroll {{
+        from {{ transform: translateX(0);    }}
+        to   {{ transform: translateX(-32px); }}
       }}
-      @keyframes spin {{
-        0%,100% {{ transform: scaleX(1);    }}
-        50%     {{ transform: scaleX(0.12); }}
+      @keyframes rspin {{
+        0%,100% {{ transform: scaleX(1);   }}
+        50%     {{ transform: scaleX(0.08); }}
       }}
       @keyframes twinkle {{
-        from {{ opacity: 0.15; }}
-        to   {{ opacity: 0.9;  }}
-      }}
-      @keyframes blink {{
-        0%,100% {{ opacity: 1; }}
-        50%     {{ opacity: 0; }}
+        from {{ opacity: 0.1; }}
+        to   {{ opacity: 0.9; }}
       }}
     </style>
   </defs>
 
-  <!-- Background -->
-  <rect width="800" height="230" rx="12" fill="{bg}"/>
+  <g clip-path="url(#card)">
 
-  <!-- Star field -->
-  {stars_svg}
+    <!-- ░░ SKY ░░ -->
+    <rect width="800" height="200" fill="url(#sky)"/>
 
-  <!-- Horizon glow -->
-  <rect x="0" y="155" width="800" height="40" fill="{p['sky_line']}" opacity="0.4"/>
-  <rect x="0" y="192" width="800" height="38" fill="{p['sky_line']}" opacity="0.6" rx="0"/>
+    <!-- Stars / clouds -->
+    {stars_svg}
+    {clouds_svg}
 
-  <!-- Neon border (gradient) -->
-  <rect x="0" y="0" width="800" height="230" rx="12"
-        fill="none" stroke="url(#border-grad)" stroke-width="2.5"/>
-  <!-- Inner border glow -->
-  <rect x="3" y="3" width="794" height="224" rx="10"
-        fill="none" stroke="{neon1}" stroke-width="0.5" opacity="0.3"/>
+    <!-- ░░ HILLS ░░ -->
+    {hill_back}
+    {hill_fore}
 
-  <!-- ════════════════════════════════════════════
-       LEFT PANEL  — Chaos Emeralds + Stats
-       ════════════════════════════════════════════ -->
-
-  <!-- Emeralds header -->
-  <text x="30" y="22" class="em-label">CHAOS EMERALDS  ({lit}/7)</text>
-
-  <!-- Emerald row -->
-  <g transform="translate(30, 28)">
-    {em_svg}
-  </g>
-
-  <!-- Divider -->
-  <line x1="30" y1="68" x2="290" y2="68" stroke="{neon1}" stroke-width="0.8" opacity="0.3"/>
-
-  <!-- Stats block -->
-  <g transform="translate(0, 82)">
-    {stat_block}
-  </g>
-
-  <!-- Rings row (scrolling, below stats) -->
-  <g transform="translate(0, 193)">
-    <clipPath id="ring-clip">
-      <rect x="30" y="-20" width="260" height="40"/>
-    </clipPath>
-    <g clip-path="url(#ring-clip)">
-      <g class="ring-row" transform="translate(30, 0)">
-        {rings_svg}
-      </g>
+    <!-- ░░ GROUND ░░ -->
+    <g class="ground">
+      <rect x="-32" y="147" width="864" height="53" fill="url(#checker)"/>
+      <!-- Grass strip -->
+      <rect x="-32" y="143" width="864" height="6" fill="{p['grass']}"/>
+      <!-- Specular highlight on grass -->
+      <rect x="-32" y="143" width="864" height="2" fill="{p['grass_hi']}" opacity="0.7"/>
     </g>
+
+    <!-- ░░ RINGS ░░ -->
+    {rings_svg}
+
+    <!-- ══════════════════════════════════════════
+         TOP HUD BAR  (Sonic 1-style: SCORE / RINGS / TIME / STREAK)
+         ══════════════════════════════════════════ -->
+    <rect width="800" height="46" fill="#000000" opacity="0.72"/>
+    <!-- Zone-coloured bottom edge of bar -->
+    <rect y="45" width="800" height="1.5" fill="{accent}" opacity="0.55"/>
+
+    <!-- SCORE -->
+    <text x="24"  y="17" class="hud-lbl">SCORE</text>
+    <text x="24"  y="37" class="hud-val">{total:,}</text>
+
+    <!-- RINGS / 7D -->
+    <text x="196" y="17" class="hud-lbl">RINGS · 7D</text>
+    <text x="196" y="37" class="hud-val">{c7}</text>
+
+    <!-- RINGS / 30D -->
+    <text x="348" y="17" class="hud-lbl">RINGS · 30D</text>
+    <text x="348" y="37" class="hud-val">{c30}</text>
+
+    <!-- STREAK -->
+    <text x="500" y="17" class="hud-lbl">STREAK</text>
+    <text x="500" y="37" class="hud-val">{streak} DAYS</text>
+
+    <!-- Zone name — right aligned -->
+    <text x="778" y="22" class="zone-name" text-anchor="end">{p['name']}</text>
+    <text x="778" y="38" class="zone-name" text-anchor="end" style="fill:#64748B">ACT 1</text>
+
+    <!-- ══════════════════════════════════════════
+         BOTTOM HUD BAR  (MODE + CHAOS EMERALDS)
+         ══════════════════════════════════════════ -->
+    <rect y="154" width="800" height="46" fill="#000000" opacity="0.72"/>
+    <!-- Zone-coloured top edge of bar -->
+    <rect y="154" width="800" height="1.5" fill="{accent}" opacity="0.55"/>
+
+    <!-- Mode -->
+    <text x="24"  y="171" class="em-lbl">MODE</text>
+    <text x="24"  y="188" class="mode-val">{mode}</text>
+
+    <!-- Chaos Emeralds -->
+    <text x="574" y="161" class="em-lbl">CHAOS EMERALDS  ({lit}/7)</text>
+    {em_svg}
+
   </g>
 
-  <!-- ════════════════════════════════════════════
-       VERTICAL DIVIDER
-       ════════════════════════════════════════════ -->
-  <line x1="320" y1="16" x2="320" y2="214"
-        stroke="{neon1}" stroke-width="1" opacity="0.25"/>
-
-  <!-- ════════════════════════════════════════════
-       RIGHT PANEL  — Username, Zone, Mode, Grid
-       ════════════════════════════════════════════ -->
-
-  <!-- Username -->
-  <text x="344" y="38" class="username-text">@{USERNAME}</text>
-
-  <!-- Zone label -->
-  <text x="344" y="60" class="zone-label">{p['label']}</text>
-
-  <!-- Thin accent line under labels -->
-  <line x1="344" y1="68" x2="762" y2="68"
-        stroke="{accent}" stroke-width="1.5" opacity="0.4" filter="url(#glow-sm)"/>
-
-  <!-- MODE badge -->
-  <rect x="344" y="78" width="210" height="36" rx="4"
-        fill="{accent}" fill-opacity="0.1" stroke="{accent}" stroke-width="1" stroke-opacity="0.5"/>
-  <text x="354" y="102" class="mode-text">{mode}</text>
-
-  <!-- Contribution grid (mini pixel heatmap, decorative) -->
-  <!-- 15 cols × 7 rows = last ~15 weeks of activity feel -->
-  <text x="344" y="136" class="em-label">CONTRIBUTION GRID</text>
-  <g transform="translate(344, 143)">
-{''.join(
-    f'<rect x="{col*26}" y="{row*12}" width="20" height="8" rx="2" '
-    f'fill="{neon1}" opacity="{0.08 + (hash((col*7+row)) % 10) * 0.09:.2f}"/>'
-    for row in range(7)
-    for col in range(16)
-)}
-  </g>
-
-  <!-- Bottom right: blinking cursor -->
-  <text x="724" y="216" class="em-label" style="animation: blink 1.2s step-end infinite; fill:{neon1}">▮</text>
-  <text x="344" y="216" class="em-label">INSERT COIN TO CONTINUE</text>
-
-  <!-- Scanlines overlay -->
-  {scanlines}
-
+  <!-- Card border -->
+  <rect width="800" height="200" rx="12" fill="none"
+        stroke="{accent}" stroke-width="1.5" opacity="0.35"/>
 </svg>"""
 
 
@@ -413,7 +376,4 @@ if __name__ == "__main__":
     svg   = render_svg(stats)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(svg)
-    print(
-        f"Generated {OUTPUT_PATH} for {USERNAME} "
-        f"({stats['zone']} zone, mode based on {stats['commits_7d']} commits/7d)"
-    )
+    print(f"Generated {OUTPUT_PATH} — {USERNAME} · {stats['zone']} zone · {stats['commits_7d']} commits/7d")

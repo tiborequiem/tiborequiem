@@ -1,194 +1,140 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 800 230" width="800" height="230"
-     role="img" aria-label="tiborequiem GitHub Activity — GREEN HILL ZONE">
+     viewBox="0 0 800 200" width="800" height="200"
+     role="img" aria-label="tiborequiem GitHub — GREEN HILL ZONE · ACT 1">
   <defs>
-    <!-- Scanline pattern -->
-    <pattern id="scanlines" width="1" height="4" patternUnits="userSpaceOnUse">
-      <rect width="1" height="2" fill="black"/>
-    </pattern>
+    <clipPath id="card"><rect width="800" height="200" rx="12"/></clipPath>
 
-    <!-- Neon glow (strong) -->
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="5" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-
-    <!-- Neon glow (subtle) -->
-    <filter id="glow-sm" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2.5" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-
-    <!-- CRT border gradient -->
-    <linearGradient id="border-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"   stop-color="#22C55E"/>
-      <stop offset="50%"  stop-color="#60A5FA"/>
-      <stop offset="100%" stop-color="#4ADE80"/>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#5BB8F5"/>
+      <stop offset="100%" stop-color="#9DD8F9"/>
     </linearGradient>
 
-    <!-- Animated ring scroll -->
+    <!-- Classic Sonic 1 checkerboard ground -->
+    <pattern id="checker" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#6B3800"/>
+      <rect x="0"  y="0"  width="16" height="16" fill="#9A5200"/>
+      <rect x="16" y="16" width="16" height="16" fill="#9A5200"/>
+    </pattern>
+
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
+      /* HUD font — monospace approximates the Sonic bitmap font */
+      .hud-lbl {
+        font: 600 9px 'Courier New', Courier, monospace;
+        fill: #94A3B8; letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+      .hud-val {
+        font: 700 16px 'Courier New', Courier, monospace;
+        fill: #FFFFFF;
+      }
+      .zone-name {
+        font: 700 10px 'Courier New', Courier, monospace;
+        fill: #4ADE80; letter-spacing: 1px;
+      }
+      .mode-val {
+        font: 700 13px 'Courier New', Courier, monospace;
+        fill: #4ADE80; letter-spacing: 1px;
+      }
+      .em-lbl {
+        font: 600 8px 'Courier New', Courier, monospace;
+        fill: #4B5563; letter-spacing: 1.5px;
+      }
 
-      .px  { font-family: 'Press Start 2P', 'Courier New', monospace; }
+      /* Ground scroll */
+      .ground { animation: gscroll 0.85s linear infinite; }
 
-      .zone-label {
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 9px; fill: #4ADE80; letter-spacing: 1px;
+      /* Ring squish — transform-box keeps origin centred on each ring */
+      .ring-spin {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: rspin 0.65s ease-in-out infinite;
       }
-      .mode-text {
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 15px; fill: #60A5FA;
-      }
-      .username-text {
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 11px; fill: white;
-      }
-      .stat-label {
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 8px; fill: #22C55E; letter-spacing: 0.5px;
-      }
-      .stat-val {
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 8px; fill: white;
-      }
-      .em-label {
-        font-family: 'Press Start 2P', 'Courier New', monospace;
-        font-size: 7px; fill: #64748B; letter-spacing: 1px;
-      }
-      .ring-row  { animation: ring-scroll 4s linear infinite; }
-      .ring-spin { animation: spin 0.7s ease-in-out infinite; }
-      .twinkle   { animation: twinkle 2.4s ease-in-out infinite alternate; }
-      .blink     { animation: blink 1.2s step-end infinite; }
 
-      @keyframes ring-scroll {
-        from { transform: translateX(0);      }
-        to   { transform: translateX(-100px); }
+      @keyframes gscroll {
+        from { transform: translateX(0);    }
+        to   { transform: translateX(-32px); }
       }
-      @keyframes spin {
-        0%,100% { transform: scaleX(1);    }
-        50%     { transform: scaleX(0.12); }
+      @keyframes rspin {
+        0%,100% { transform: scaleX(1);   }
+        50%     { transform: scaleX(0.08); }
       }
       @keyframes twinkle {
-        from { opacity: 0.15; }
-        to   { opacity: 0.9;  }
-      }
-      @keyframes blink {
-        0%,100% { opacity: 1; }
-        50%     { opacity: 0; }
+        from { opacity: 0.1; }
+        to   { opacity: 0.9; }
       }
     </style>
   </defs>
 
-  <!-- Background -->
-  <rect width="800" height="230" rx="12" fill="#0C1428"/>
+  <g clip-path="url(#card)">
 
-  <!-- Star field -->
-  
+    <!-- ░░ SKY ░░ -->
+    <rect width="800" height="200" fill="url(#sky)"/>
 
-  <!-- Horizon glow -->
-  <rect x="0" y="155" width="800" height="40" fill="#1A3A1A" opacity="0.4"/>
-  <rect x="0" y="192" width="800" height="38" fill="#1A3A1A" opacity="0.6" rx="0"/>
-
-  <!-- Neon border (gradient) -->
-  <rect x="0" y="0" width="800" height="230" rx="12"
-        fill="none" stroke="url(#border-grad)" stroke-width="2.5"/>
-  <!-- Inner border glow -->
-  <rect x="3" y="3" width="794" height="224" rx="10"
-        fill="none" stroke="#22C55E" stroke-width="0.5" opacity="0.3"/>
-
-  <!-- ════════════════════════════════════════════
-       LEFT PANEL  — Chaos Emeralds + Stats
-       ════════════════════════════════════════════ -->
-
-  <!-- Emeralds header -->
-  <text x="30" y="22" class="em-label">CHAOS EMERALDS  (3/7)</text>
-
-  <!-- Emerald row -->
-  <g transform="translate(30, 28)">
-    <g filter="url(#glow-sm)">  <polygon points="32,8 42,18 32,28 22,18"           fill="#38BDF8" stroke="white" stroke-width="1"/></g><g filter="url(#glow-sm)">  <polygon points="68,8 78,18 68,28 58,18"           fill="#FACC15" stroke="white" stroke-width="1"/></g><g filter="url(#glow-sm)">  <polygon points="104,8 114,18 104,28 94,18"           fill="#EF4444" stroke="white" stroke-width="1"/></g><polygon points="140,8 150,18 140,28 130,18" fill="none" stroke="#334155" stroke-width="1" opacity="0.5"/><polygon points="176,8 186,18 176,28 166,18" fill="none" stroke="#334155" stroke-width="1" opacity="0.5"/><polygon points="212,8 222,18 212,28 202,18" fill="none" stroke="#334155" stroke-width="1" opacity="0.5"/><polygon points="248,8 258,18 248,28 238,18" fill="none" stroke="#334155" stroke-width="1" opacity="0.5"/>
-  </g>
-
-  <!-- Divider -->
-  <line x1="30" y1="68" x2="290" y2="68" stroke="#22C55E" stroke-width="0.8" opacity="0.3"/>
-
-  <!-- Stats block -->
-  <g transform="translate(0, 82)">
+    <!-- Stars / clouds -->
     
-  <text x="30"  y="0"    class="stat-label">SCORE</text>
-  <text x="210" y="0"    class="stat-val">161</text>
-  <rect x="30"  y="5"  width="230" height="4" rx="2" fill="#1E293B"/>
-  <rect x="30"  y="5"  width="37" height="4" rx="2"
-        fill="#4ADE80" filter="url(#glow-sm)"/>
+    <g opacity="0.95"><ellipse cx="118" cy="72" rx="30" ry="16" fill="white"/><ellipse cx="142" cy="65" rx="20" ry="14" fill="white"/><ellipse cx="96" cy="67" rx="18" ry="12" fill="white"/><ellipse cx="390" cy="62" rx="22" ry="12" fill="white"/><ellipse cx="408" cy="57" rx="15" ry="10" fill="white"/><ellipse cx="374" cy="59" rx="13" ry="9" fill="white"/><ellipse cx="636" cy="70" rx="33" ry="17" fill="white"/><ellipse cx="662" cy="63" rx="22" ry="15" fill="white"/><ellipse cx="612" cy="65" rx="19" ry="13" fill="white"/></g>
 
-  <text x="30"  y="32"    class="stat-label">RINGS · 7D</text>
-  <text x="210" y="32"    class="stat-val">10</text>
-  <rect x="30"  y="37"  width="230" height="4" rx="2" fill="#1E293B"/>
-  <rect x="30"  y="37"  width="76" height="4" rx="2"
-        fill="#22C55E" filter="url(#glow-sm)"/>
+    <!-- ░░ HILLS ░░ -->
+    <path d="M0,147 C40,147 70,88 155,88 C240,88 270,147 360,147          C450,147 480,84 565,84 C650,84 680,147 800,147 Z" fill="#2DB447" stroke="#1A8A2E" stroke-width="1.5"/>
+    <path d="M0,147 C30,147 55,116 115,116 C175,116 200,147 270,147          C340,147 365,112 435,112 C505,112 530,147 610,147          C680,147 710,118 775,118 C800,118 800,138 800,147 Z" fill="#208A38" stroke="#135E22" stroke-width="1"/>
 
-  <text x="30"  y="64"    class="stat-label">RINGS · 30D</text>
-  <text x="210" y="64"    class="stat-val">44</text>
-  <rect x="30"  y="69"  width="230" height="4" rx="2" fill="#1E293B"/>
-  <rect x="30"  y="69"  width="101" height="4" rx="2"
-        fill="#22C55E" filter="url(#glow-sm)"/>
-
-  <text x="30"  y="96"    class="stat-label">STREAK</text>
-  <text x="210" y="96"    class="stat-val">3 DAYS</text>
-  <rect x="30"  y="101"  width="230" height="4" rx="2" fill="#1E293B"/>
-  <rect x="30"  y="101"  width="98" height="4" rx="2"
-        fill="#60A5FA" filter="url(#glow-sm)"/>
-  </g>
-
-  <!-- Rings row (scrolling, below stats) -->
-  <g transform="translate(0, 193)">
-    <clipPath id="ring-clip">
-      <rect x="30" y="-20" width="260" height="40"/>
-    </clipPath>
-    <g clip-path="url(#ring-clip)">
-      <g class="ring-row" transform="translate(30, 0)">
-        <g transform="translate(42,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(142,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(242,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(342,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(442,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(542,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(642,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(742,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(842,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g><g transform="translate(942,0)" filter="url(#glow-sm)">  <g class="ring-spin">    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#22C55E" stroke-width="4"/>    <ellipse cx="0" cy="0" rx="16" ry="16"             fill="none" stroke="#4ADE80" stroke-width="1.5"             stroke-dasharray="14 18"/>  </g></g>
-      </g>
+    <!-- ░░ GROUND ░░ -->
+    <g class="ground">
+      <rect x="-32" y="147" width="864" height="53" fill="url(#checker)"/>
+      <!-- Grass strip -->
+      <rect x="-32" y="143" width="864" height="6" fill="#29C242"/>
+      <!-- Specular highlight on grass -->
+      <rect x="-32" y="143" width="864" height="2" fill="#52E870" opacity="0.7"/>
     </g>
+
+    <!-- ░░ RINGS ░░ -->
+    <g transform="translate(210,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(305,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(400,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(495,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(590,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g>
+
+    <!-- ══════════════════════════════════════════
+         TOP HUD BAR  (Sonic 1-style: SCORE / RINGS / TIME / STREAK)
+         ══════════════════════════════════════════ -->
+    <rect width="800" height="46" fill="#000000" opacity="0.72"/>
+    <!-- Zone-coloured bottom edge of bar -->
+    <rect y="45" width="800" height="1.5" fill="#4ADE80" opacity="0.55"/>
+
+    <!-- SCORE -->
+    <text x="24"  y="17" class="hud-lbl">SCORE</text>
+    <text x="24"  y="37" class="hud-val">100</text>
+
+    <!-- RINGS / 7D -->
+    <text x="196" y="17" class="hud-lbl">RINGS · 7D</text>
+    <text x="196" y="37" class="hud-val">3</text>
+
+    <!-- RINGS / 30D -->
+    <text x="348" y="17" class="hud-lbl">RINGS · 30D</text>
+    <text x="348" y="37" class="hud-val">25</text>
+
+    <!-- STREAK -->
+    <text x="500" y="17" class="hud-lbl">STREAK</text>
+    <text x="500" y="37" class="hud-val">3 DAYS</text>
+
+    <!-- Zone name — right aligned -->
+    <text x="778" y="22" class="zone-name" text-anchor="end">GREEN HILL ZONE</text>
+    <text x="778" y="38" class="zone-name" text-anchor="end" style="fill:#64748B">ACT 1</text>
+
+    <!-- ══════════════════════════════════════════
+         BOTTOM HUD BAR  (MODE + CHAOS EMERALDS)
+         ══════════════════════════════════════════ -->
+    <rect y="154" width="800" height="46" fill="#000000" opacity="0.72"/>
+    <!-- Zone-coloured top edge of bar -->
+    <rect y="154" width="800" height="1.5" fill="#4ADE80" opacity="0.55"/>
+
+    <!-- Mode -->
+    <text x="24"  y="171" class="em-lbl">MODE</text>
+    <text x="24"  y="188" class="mode-val">CRUISING</text>
+
+    <!-- Chaos Emeralds -->
+    <text x="574" y="161" class="em-lbl">CHAOS EMERALDS  (3/7)</text>
+    <polygon points="574,163 583,175 574,187 565,175" fill="#38BDF8" stroke="rgba(255,255,255,0.6)" stroke-width="0.8"/><polygon points="604,163 613,175 604,187 595,175" fill="#F9C200" stroke="rgba(255,255,255,0.6)" stroke-width="0.8"/><polygon points="634,163 643,175 634,187 625,175" fill="#EF4444" stroke="rgba(255,255,255,0.6)" stroke-width="0.8"/><polygon points="664,163 673,175 664,187 655,175" fill="none" stroke="#2D3748" stroke-width="1"/><polygon points="694,163 703,175 694,187 685,175" fill="none" stroke="#2D3748" stroke-width="1"/><polygon points="724,163 733,175 724,187 715,175" fill="none" stroke="#2D3748" stroke-width="1"/><polygon points="754,163 763,175 754,187 745,175" fill="none" stroke="#2D3748" stroke-width="1"/>
+
   </g>
 
-  <!-- ════════════════════════════════════════════
-       VERTICAL DIVIDER
-       ════════════════════════════════════════════ -->
-  <line x1="320" y1="16" x2="320" y2="214"
-        stroke="#22C55E" stroke-width="1" opacity="0.25"/>
-
-  <!-- ════════════════════════════════════════════
-       RIGHT PANEL  — Username, Zone, Mode, Grid
-       ════════════════════════════════════════════ -->
-
-  <!-- Username -->
-  <text x="344" y="38" class="username-text">@tiborequiem</text>
-
-  <!-- Zone label -->
-  <text x="344" y="60" class="zone-label">GREEN HILL ZONE</text>
-
-  <!-- Thin accent line under labels -->
-  <line x1="344" y1="68" x2="762" y2="68"
-        stroke="#60A5FA" stroke-width="1.5" opacity="0.4" filter="url(#glow-sm)"/>
-
-  <!-- MODE badge -->
-  <rect x="344" y="78" width="210" height="36" rx="4"
-        fill="#60A5FA" fill-opacity="0.1" stroke="#60A5FA" stroke-width="1" stroke-opacity="0.5"/>
-  <text x="354" y="102" class="mode-text">PEEL OUT</text>
-
-  <!-- Contribution grid (mini pixel heatmap, decorative) -->
-  <!-- 15 cols × 7 rows = last ~15 weeks of activity feel -->
-  <text x="344" y="136" class="em-label">CONTRIBUTION GRID</text>
-  <g transform="translate(344, 143)">
-<rect x="0" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="26" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="52" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="78" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="104" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="130" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="156" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="182" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="208" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="234" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="260" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="286" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="312" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="338" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="364" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="390" y="0" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="0" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="26" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="52" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="78" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="104" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="130" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="156" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="182" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="208" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="234" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="260" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="286" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="312" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="338" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="364" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="390" y="12" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="0" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="26" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="52" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="78" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="104" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="130" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="156" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="182" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="208" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="234" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="260" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="286" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="312" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="338" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="364" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="390" y="24" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="0" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="26" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="52" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="78" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="104" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="130" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="156" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="182" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="208" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="234" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="260" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="286" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="312" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="338" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="364" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="390" y="36" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="0" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="26" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="52" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="78" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="104" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="130" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="156" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="182" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="208" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="234" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="260" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="286" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="312" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="338" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="364" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="390" y="48" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="0" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="26" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="52" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="78" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="104" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="130" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="156" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="182" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="208" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="234" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="260" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="286" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="312" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="338" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="364" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="390" y="60" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="0" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="26" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="52" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="78" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="104" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="130" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/><rect x="156" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.80"/><rect x="182" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.53"/><rect x="208" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.26"/><rect x="234" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.89"/><rect x="260" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.62"/><rect x="286" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.35"/><rect x="312" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.08"/><rect x="338" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.71"/><rect x="364" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.44"/><rect x="390" y="72" width="20" height="8" rx="2" fill="#22C55E" opacity="0.17"/>
-  </g>
-
-  <!-- Bottom right: blinking cursor -->
-  <text x="724" y="216" class="em-label" style="animation: blink 1.2s step-end infinite; fill:#22C55E">▮</text>
-  <text x="344" y="216" class="em-label">INSERT COIN TO CONTINUE</text>
-
-  <!-- Scanlines overlay -->
-  <rect width="800" height="230" fill="url(#scanlines)" pointer-events="none" rx="12" opacity="0.18"/>
-
+  <!-- Card border -->
+  <rect width="800" height="200" rx="12" fill="none"
+        stroke="#4ADE80" stroke-width="1.5" opacity="0.35"/>
 </svg>
