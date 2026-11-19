@@ -1,0 +1,44 @@
+name: Update Sonic Zone Profile SVG
+
+on:
+  schedule:
+    # Update every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'scripts/generate_sonic.py'
+
+permissions:
+  contents: write
+
+jobs:
+  update-svg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate Sonic Profile SVG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+          TZ_OFFSET: 2
+          OUTPUT_PATH: sonic-zone.svg
+        run: |
+          python scripts/generate_sonic.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add sonic-zone.svg
+          git diff --staged --quiet || (git commit -m "chore: update sonic-zone.svg [skip ci]" && git push)

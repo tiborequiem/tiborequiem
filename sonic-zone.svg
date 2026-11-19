@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220" width="800" height="220" role="img" aria-label="tiborequiem GREEN HILL ZONE GitHub Activity">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#7DD3FC"/>
+    </linearGradient>
+    <pattern id="checker" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#92400E"/>
+      <rect width="16" height="16" fill="#B45309"/>
+      <rect x="16" y="16" width="16" height="16" fill="#B45309"/>
+    </pattern>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .hud-label { font: 700 12px 'Courier New', monospace; fill: #FACC15; letter-spacing: 1px; }
+      .hud-val { font: 700 12px 'Courier New', monospace; fill: #FFFFFF; }
+      .zone-title { font: 700 11px 'Courier New', monospace; fill: #E2E8F0; letter-spacing: 1.5px; }
+      .ground { animation: ground-scroll 0.75s linear infinite; }
+      .rings-track { animation: ring-scroll 3.4s linear infinite; }
+      .sonic { animation: bob 0.42s ease-in-out infinite; }
+      .ring-spin { animation: spin 0.7s ease-in-out infinite; }
+      .wheel { transform-origin: 162px 158px; animation: rotate 0.16s linear infinite; }
+      .aura { animation: pulse 0.5s ease-in-out infinite alternate; }
+      .twinkle { animation: pulse 1.8s ease-in-out infinite alternate; }
+      @keyframes ground-scroll { from { transform: translateX(0); } to { transform: translateX(-32px); } }
+      @keyframes ring-scroll { from { transform: translateX(0); } to { transform: translateX(-480px); } }
+      @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+      @keyframes spin { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(0.2); } }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      @keyframes pulse { from { opacity: 0.25; } to { opacity: 0.75; } }
+    </style>
+  </defs>
+
+  <rect width="800" height="220" rx="10" fill="url(#sky)"/>
+  
+
+  <path d="M0 168 L110 105 L230 168 L360 95 L510 168 L650 112 L800 168 Z" fill="#15803D" opacity="0.65"/>
+  <path d="M0 168 L80 130 L190 168 L310 124 L440 168 L590 132 L720 168 L800 142 L800 168 Z" fill="#22C55E" opacity="0.8"/>
+
+  <g class="ground">
+    <rect x="0" y="168" width="864" height="52" fill="url(#checker)"/>
+    <rect x="0" y="164" width="864" height="8" fill="#16A34A"/>
+    <rect x="0" y="164" width="864" height="3" fill="#4ADE80"/>
+  </g>
+
+  <g class="rings-track">
+    <g transform="translate(340, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g><g transform="translate(435, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g><g transform="translate(530, 144)">  <g class="ring-spin">    <circle cx="0" cy="0" r="10" fill="none" stroke="#FACC15" stroke-width="3.5"/>    <circle cx="0" cy="0" r="10" fill="none" stroke="#FEF08A" stroke-width="1" stroke-dasharray="10 20"/>  </g></g>
+  </g>
+
+  
+
+  <g class="sonic">
+    
+    <!-- Spines -->
+    <polygon points="154,116 122,110 146,128" fill="#1E40AF"/>
+    <polygon points="152,126 118,128 148,138" fill="#2563EB"/>
+    <polygon points="150,136 124,146 150,146" fill="#1E40AF"/>
+    
+    <!-- Torso -->
+    <circle cx="160" cy="138" r="13" fill="#2563EB"/>
+    <!-- Belly -->
+    <circle cx="163" cy="138" r="8" fill="#FED7AA"/>
+
+    <!-- Head -->
+    <circle cx="162" cy="118" r="14" fill="#2563EB"/>
+
+    <!-- Ear -->
+    <polygon points="150,110 146,96 158,104" fill="#2563EB"/>
+    <polygon points="150,108 148,99 156,105" fill="#FED7AA"/>
+
+    <!-- Muzzle / Cheek -->
+    <ellipse cx="169" cy="122" rx="9" ry="7" fill="#FED7AA"/>
+    <!-- Nose -->
+    <circle cx="178" cy="120" r="2.2" fill="#0F172A"/>
+
+    <!-- Eye & Pupil -->
+    <ellipse cx="168" cy="115" rx="5" ry="7" fill="#FFFFFF"/>
+    <ellipse cx="170" cy="115" rx="2.5" ry="4.5" fill="#16A34A"/>
+    <circle cx="171" cy="113" r="1" fill="#FFFFFF"/>
+
+    <!-- Smirk -->
+    <path d="M168 124 Q173 126 176 123" stroke="#9A3412" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+    <!-- Arm & Glove -->
+    <path d="M158 136 Q170 144 178 138" stroke="#FED7AA" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="179" cy="138" r="4.5" fill="#F8FAFC"/>
+    <circle cx="180" cy="138" r="2" fill="#E2E8F0"/>
+
+    <!-- Legs & Shoes -->
+    
+        <ellipse cx="155" cy="161" rx="9" ry="5" fill="#DC2626"/>
+        <rect x="152" y="158" width="6" height="2" fill="#FFFFFF"/>
+        <ellipse cx="171" cy="161" rx="9" ry="5" fill="#B91C1C"/>
+        <rect x="168" y="158" width="6" height="2" fill="#FFFFFF"/>
+  </g>
+
+  <!-- HUD Section -->
+  <g class="hud" transform="translate(24, 26)">
+    <text x="0" y="0" class="zone-title">GREEN HILL ZONE · ACT 1</text>
+    
+    <text x="0" y="22" class="hud-label">SCORE</text>
+    <text x="75" y="22" class="hud-val">100</text>
+
+    <text x="0" y="42" class="hud-label">TIME (7D)</text>
+    <text x="75" y="42" class="hud-val">3 COMMITS</text>
+
+    <text x="0" y="62" class="hud-label">RINGS (30D)</text>
+    <text x="75" y="62" class="hud-val">25</text>
+
+    <text x="210" y="22" class="hud-label">STREAK</text>
+    <text x="270" y="22" class="hud-val">3 DAYS</text>
+
+    <text x="210" y="42" class="hud-label">MODE</text>
+    <text x="270" y="42" class="hud-val">CRUISING</text>
+  </g>
+
+  <!-- Chaos Emeralds HUD -->
+  <g class="emeralds">
+    <text x="595" y="16" class="zone-title">CHAOS EMERALDS (3/7)</text>
+    <polygon points="595,24 603,32 595,44 587,32" fill="#38BDF8" stroke="#FFFFFF" stroke-width="1.5" opacity="1"/><polygon points="623,24 631,32 623,44 615,32" fill="#FACC15" stroke="#FFFFFF" stroke-width="1.5" opacity="1"/><polygon points="651,24 659,32 651,44 643,32" fill="#EF4444" stroke="#FFFFFF" stroke-width="1.5" opacity="1"/><polygon points="679,24 687,32 679,44 671,32" fill="none" stroke="#94A3B8" stroke-width="1.5" opacity="0.35"/><polygon points="707,24 715,32 707,44 699,32" fill="none" stroke="#94A3B8" stroke-width="1.5" opacity="0.35"/><polygon points="735,24 743,32 735,44 727,32" fill="none" stroke="#94A3B8" stroke-width="1.5" opacity="0.35"/><polygon points="763,24 771,32 763,44 755,32" fill="none" stroke="#94A3B8" stroke-width="1.5" opacity="0.35"/>
+  </g>
+</svg>

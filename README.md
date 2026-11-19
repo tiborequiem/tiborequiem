@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="sonic-zone.svg" alt="Sonic Zone GitHub Activity" width="100%">
+</div>
+
 ## Hey there! 👋
 
 I'm [Tibo](https://github.com/tiborequiem)
