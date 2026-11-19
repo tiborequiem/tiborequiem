@@ -29,11 +29,11 @@
       }
       .zone-name {
         font: 700 10px 'Courier New', Courier, monospace;
-        fill: #4ADE80; letter-spacing: 1px;
+        fill: #60A5FA; letter-spacing: 1px;
       }
       .mode-val {
         font: 700 13px 'Courier New', Courier, monospace;
-        fill: #4ADE80; letter-spacing: 1px;
+        fill: #60A5FA; letter-spacing: 1px;
       }
       .em-lbl {
         font: 600 8px 'Courier New', Courier, monospace;
@@ -41,7 +41,7 @@
       }
 
       /* Ground scroll */
-      .ground { animation: gscroll 0.85s linear infinite; }
+      .ground { animation: gscroll 0.44s linear infinite; }
 
       /* Ring squish — transform-box keeps origin centred on each ring */
       .ring-spin {
@@ -88,26 +88,26 @@
     </g>
 
     <!-- ░░ RINGS ░░ -->
-    <g transform="translate(210,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(305,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(400,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(495,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(590,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g>
+    <g transform="translate(210,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(264,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(318,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(372,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(427,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(481,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(535,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g><g transform="translate(590,130)">  <g class="ring-spin">    <circle cx="0" cy="0" r="11" fill="none" stroke="#F9C200" stroke-width="4.5"/>    <circle cx="0" cy="0" r="11" fill="none" stroke="#FFF5A0" stroke-width="1.5"            stroke-dasharray="8 14" stroke-linecap="round"/>  </g></g>
 
     <!-- ══════════════════════════════════════════
          TOP HUD BAR  (Sonic 1-style: SCORE / RINGS / TIME / STREAK)
          ══════════════════════════════════════════ -->
     <rect width="800" height="46" fill="#000000" opacity="0.72"/>
     <!-- Zone-coloured bottom edge of bar -->
-    <rect y="45" width="800" height="1.5" fill="#4ADE80" opacity="0.55"/>
+    <rect y="45" width="800" height="1.5" fill="#60A5FA" opacity="0.55"/>
 
     <!-- SCORE -->
     <text x="24"  y="17" class="hud-lbl">SCORE</text>
-    <text x="24"  y="37" class="hud-val">100</text>
+    <text x="24"  y="37" class="hud-val">162</text>
 
     <!-- RINGS / 7D -->
     <text x="196" y="17" class="hud-lbl">RINGS · 7D</text>
-    <text x="196" y="37" class="hud-val">3</text>
+    <text x="196" y="37" class="hud-val">11</text>
 
     <!-- RINGS / 30D -->
     <text x="348" y="17" class="hud-lbl">RINGS · 30D</text>
-    <text x="348" y="37" class="hud-val">25</text>
+    <text x="348" y="37" class="hud-val">45</text>
 
     <!-- STREAK -->
     <text x="500" y="17" class="hud-lbl">STREAK</text>
@@ -122,11 +122,11 @@
          ══════════════════════════════════════════ -->
     <rect y="154" width="800" height="46" fill="#000000" opacity="0.72"/>
     <!-- Zone-coloured top edge of bar -->
-    <rect y="154" width="800" height="1.5" fill="#4ADE80" opacity="0.55"/>
+    <rect y="154" width="800" height="1.5" fill="#60A5FA" opacity="0.55"/>
 
     <!-- Mode -->
     <text x="24"  y="171" class="em-lbl">MODE</text>
-    <text x="24"  y="188" class="mode-val">CRUISING</text>
+    <text x="24"  y="188" class="mode-val">PEEL OUT</text>
 
     <!-- Chaos Emeralds -->
     <text x="574" y="161" class="em-lbl">CHAOS EMERALDS  (3/7)</text>
@@ -136,5 +136,5 @@
 
   <!-- Card border -->
   <rect width="800" height="200" rx="12" fill="none"
-        stroke="#4ADE80" stroke-width="1.5" opacity="0.35"/>
+        stroke="#60A5FA" stroke-width="1.5" opacity="0.35"/>
 </svg>
