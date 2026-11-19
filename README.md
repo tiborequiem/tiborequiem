@@ -1,6 +1,6 @@
-<div align="center">
-  <img src="sonic-zone.svg" alt="Sonic Zone GitHub Activity" width="100%">
-</div>
+<p align="center">
+  <img src="koi/koi.gif" width="256" alt="Tibo's koi" />
+</p>
 
 ## Hey there! 👋
 
