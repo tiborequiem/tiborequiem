@@ -28,9 +28,9 @@
       .em-label { font: 600 9px  'Courier New', monospace; fill: #CBD5E1;
                    letter-spacing: 1.5px; }
 
-      .ground   { animation: ground-scroll 0.70s linear infinite; }
-      .ring-trk { animation: ring-scroll 3.2s linear infinite;   }
-      .sonic    { animation: bob 0.40s ease-in-out infinite; }
+      .ground   { animation: ground-scroll 0.32s linear infinite; }
+      .ring-trk { animation: ring-scroll 2.0s linear infinite;   }
+      .sonic    { animation: bob 0.22s ease-in-out infinite; }
       .ring-spin{ animation: spin 0.65s ease-in-out infinite; }
       .aura     { animation: pulse 0.55s ease-in-out infinite alternate; }
       .twinkle  { animation: pulse 2s ease-in-out infinite alternate; }
@@ -96,11 +96,17 @@
 
   <!-- Rings -->
   <g class="ring-trk">
-    <g transform="translate(320,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(430,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(540,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(650,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(760,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(870,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g>
+    <g transform="translate(320,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(430,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(540,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(650,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(760,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(870,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(980,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g><g transform="translate(1090,148)">  <g class="ring-spin">    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FACC15" stroke-width="4"/>    <circle cx="0" cy="0" r="13" fill="none"            stroke="#FEF08A" stroke-width="1.5"            stroke-dasharray="12 20"/>  </g></g>
   </g>
 
   <!-- Speed lines (behind Sonic) -->
   
+  <g stroke="white" stroke-linecap="round" opacity="0.45">
+    <line x1="10"  y1="104" x2="120" y2="104" stroke-width="2.5"/>
+    <line x1="4"   y1="122" x2="100" y2="122" stroke-width="2"/>
+    <line x1="14"  y1="140" x2="108" y2="140" stroke-width="1.5"/>
+    <line x1="2"   y1="90"  x2="80"  y2="90"  stroke-width="1.5"/>
+  </g>
 
   <!-- Sonic (animated bob) -->
   <g class="sonic">
@@ -222,13 +228,13 @@
   <line x1="0" y1="178" x2="800" y2="178" stroke="#FACC15" stroke-width="1.5" opacity="0.6"/>
 
   <text x="16"  y="192" class="hud-key">SCORE</text>
-  <text x="68"  y="192" class="hud-val">100</text>
+  <text x="68"  y="192" class="hud-val">161</text>
 
   <text x="16"  y="208" class="hud-key">RINGS·7D</text>
-  <text x="90"  y="208" class="hud-val">3</text>
+  <text x="90"  y="208" class="hud-val">10</text>
 
   <text x="200" y="192" class="hud-key">RINGS·30D</text>
-  <text x="278" y="192" class="hud-val">25</text>
+  <text x="278" y="192" class="hud-val">44</text>
 
   <text x="200" y="208" class="hud-key">STREAK</text>
   <text x="258" y="208" class="hud-val">3D</text>
@@ -237,6 +243,6 @@
   <text x="416" y="192" class="hud-val">GREEN HILL ZONE</text>
 
   <text x="380" y="208" class="hud-key">MODE</text>
-  <text x="416" y="208" class="hud-val">CRUISING</text>
+  <text x="416" y="208" class="hud-val">PEEL OUT</text>
 
 </svg>
